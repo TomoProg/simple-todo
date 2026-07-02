@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - BUNDLE_PATH=/app/vendor/bundle
+    command: bash -lc "bundle install && bundle exec rails s -b 0.0.0.0 -p 3000"
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -lc "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
